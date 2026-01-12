@@ -134,7 +134,7 @@ class NSGA2:
     def crossover_sbx(self, p1, p2, bounds):
         """Simulated Binary Crossover"""
         child1, child2 = [], []
-        eta_c = 20  # Distribution index
+        eta_c = 20  # Distribution index, controls how much it resembles his parent
 
         for j in range(len(p1)):
             if random.random() < 0.5:
@@ -146,10 +146,13 @@ class NSGA2:
                         y1, y2 = p2[j], p1[j]
 
                     rand = random.random()
+                    # beta calculates how close is y1 to lower bound
                     beta = 1.0 + (2.0 * (y1 - bounds[j][0]) / (y2 - y1))
+                    # alpha is a normalization factor
                     alpha = 2.0 - beta ** -(eta_c + 1)
 
                     if rand <= (1.0 / alpha):
+                    # spread factor: controls how different is child from his parent
                         beta_q = (rand * alpha) ** (1.0 / (eta_c + 1))
                     else:
                         beta_q = (1.0 / (2.0 - rand * alpha)) ** (1.0 / (eta_c + 1))
